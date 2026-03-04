@@ -65,17 +65,21 @@ class Cannonball:
 class Crazyball(Cannonball):
     def move(self, sec, grav):
         self.rand_q = random.randrange(0, 10)
+        self.rand_q2 = self.rand_q + random.randomrange(-50, 50)
 
         dx = self._vx * sec
         dy = self._vy * sec
 
-        self._vy = self._vy - grav * sec
-
-        self._x = self._x + dx
-        self._y = self._y + dy
+        self._vy = self._vy - grav * sec * random.random()
 
         if self.getX() < 400:
-            print("what")
+            self._x += self._randq2
+        else:
+            self._x += dx
+        if self.getY() > 200:
+            self._y += self._randq2
+        else:
+            self._y += dy
 
 
 def run_app():
