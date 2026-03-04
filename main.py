@@ -5,6 +5,21 @@ import pandas as pd
 import streamlit as st
 import random
 
+class Print_Iface:
+    def __init__(self):
+        self._xs = []
+        self._ys = []
+
+    def main_print(self):
+        return self._xs, self._ys
+    
+    def modify_plot(self, x=None, y=None, clear=False):
+        if clear:
+            self._xs.clear()
+            self._ys.clear()
+        else:
+            self._xs.append(x)
+            self._ys.append(y)
 
 ## Represent a cannonball, tracking its position and velocity.
 #
@@ -17,6 +32,7 @@ class Cannonball:
         self._y = 0
         self._vx = 0
         self._vy = 0
+        self.printer = Print_Iface()
 
     ## Move the cannon ball, using its current velocities.
     #  @param sec the amount of time that has elapsed.
@@ -51,15 +67,13 @@ class Cannonball:
         self._vy = velocity * sin(angle)
         self.move(step, user_grav)
 
-        xs = []
-        ys = []
+        self.printer.modify_plot(clear=True)
 
         while self.getY() > 1e-14:
-            xs.append(self.getX())
-            ys.append(self.getY())
+            self.printer.modify_plot(self.getX(), self.getY())
             self.move(step, user_grav)
 
-        return xs, ys
+        return self.printer.main_print()
 
 
 class Crazyball(Cannonball):
